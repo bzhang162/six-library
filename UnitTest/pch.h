@@ -46,10 +46,9 @@
 
 #include "six/modules/c++/cpp_pch.h"
 #include <fstream>
+#pragma warning(pop)
 
 #include <nitf/coda-oss.hpp>
-
-#pragma warning(pop)
 
 #include <import/except.h>
 #include <import/types.h>
