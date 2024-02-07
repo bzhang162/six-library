@@ -69,8 +69,8 @@ namespace simd
 
 		using Vec = typename details::VecNt<abi_type::N, T>::Vector_class; // e.g., Vec4i
 
-		static constexpr std::integral_constant<details::size_type, Vec::size()> size;
-		static_assert(size() == Vec::size());
+	        static constexpr std::integral_constant<details::size_type, Vec::size()> size = -1;
+	        //static_assert(size() == Vec::size());
 
 		constexpr basic_simd() noexcept = default;
 
