@@ -1,8 +1,8 @@
 /****************************  vectorf512.h   *******************************
 * Author:        Agner Fog
 * Date created:  2014-07-23
-* Last modified: 2022-07-20
-* Version:       2.02.00
+* Last modified: 2023-07-04
+* Version:       2.02.02
 * Project:       vector class library
 * Description:
 * Header file defining 512-bit floating point vector classes
@@ -19,7 +19,7 @@
 * Each vector object is represented internally in the CPU as two 256-bit registers.
 * This header file defines operators and functions for these vectors.
 *
-* (c) Copyright 2014-2022 Agner Fog.
+* (c) Copyright 2014-2023 Agner Fog.
 * Apache License version 2.0 or later.
 *****************************************************************************/
 
@@ -333,9 +333,10 @@ public:
         z1 = Vec8f(f8, f9, f10, f11, f12, f13, f14, f15);
     }
     // Constructor to build from two Vec8f:
-    Vec16f(const Vec8f& a0, const Vec8f& a1) : z0(a0), z1(a1) { }
-    Vec16f(Vec8f&& a0, Vec8f&& a1) : z0(std::move(a0)), z1(std::move(a1)) { }
-
+    Vec16f(Vec8f const a0, Vec8f const a1) {
+        z0 = a0;
+        z1 = a1;
+    }
     // split into two halves
     Vec8f get_low() const {
         return z0;
@@ -929,7 +930,7 @@ static inline Vec16f infinite16f() {
 }
 
 // Function nan4f: returns a vector where all elements are +NAN (quiet)
-static inline Vec16f nan16f(int n = 0x10) {
+static inline Vec16f nan16f(uint32_t n = 0x10) {
     Vec8f nan = nan8f(n);
     return Vec16f(nan, nan);
 }
@@ -1580,7 +1581,7 @@ static inline Vec8d infinite8d() {
 }
 
 // Function nan8d: returns a vector where all elements are +NAN (quiet NAN)
-static inline Vec8d nan8d(int n = 0x10) {
+static inline Vec8d nan8d(uint32_t n = 0x10) {
     Vec4d nan = nan4d(n);
     return Vec8d(nan, nan);
 }

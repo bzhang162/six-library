@@ -31,9 +31,7 @@
 #ifndef COMPLEXVEC_H
 #define COMPLEXVEC_H  200
 
-#ifndef VECTORCLASS_H
 #include "vectorclass.h"
-#endif
 #include <cmath>
 
 #ifdef VCL_NAMESPACE
@@ -1132,9 +1130,8 @@ public:
         y = x;
     }
 #else
-    Complex8f(const Vec16f& x) : y(x)  {  // constructor to convert from emulated Vec16f
-    }
-    Complex8f(Vec16f&& x) : y(std::move(x)) {  // constructor to convert from emulated Vec16f
+    Complex8f(Vec16f const x) {  // constructor to convert from emulated Vec16f
+        y = x;
     }
 #endif
     // Assignment operator to convert from type __m512 used in intrinsics or Vec256fe used in emulation

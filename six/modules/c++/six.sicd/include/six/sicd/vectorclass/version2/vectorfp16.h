@@ -1,8 +1,8 @@
 /****************************  vectorfp16.h   *******************************
 * Author:        Agner Fog
 * Date created:  2022-05-03
-* Last modified: 2023-06-03
-* Version:       2.02.01
+* Last modified: 2023-11-07
+* Version:       2.02.02
 * Project:       vector class library
 * Description:
 * Header file defining half precision floating point vector classes
@@ -48,7 +48,11 @@ namespace VCL_NAMESPACE {
 #endif
 
 // type Float16 emulates _Float16 in vectorfp16e.h if _Float16 not defined
-typedef _Float16 Float16;  // Float16 needs no emulation
+#ifdef __STDCPP_FLOAT16_T__
+typedef std::float16_t Float16; 
+#else
+typedef _Float16 Float16;
+#endif
 
 
 /*****************************************************************************
@@ -203,13 +207,13 @@ static inline Vec8h & operator += (Vec8h & a, Vec8h const b) {
 // postfix operator ++
 static inline Vec8h operator ++ (Vec8h & a, int) {
     Vec8h a0 = a;
-    a = a + _Float16(1.); // 1.0f16 not supported by g++ version 12.1
+    a = a + _Float16(1); // 1.0f16 not supported by g++ version 12.1
     return a0;
 }
 
 // prefix operator ++
 static inline Vec8h & operator ++ (Vec8h & a) {
-    a = a +  _Float16(1.);
+    a = a +  _Float16(1);
     return a;
 }
 
@@ -219,10 +223,10 @@ static inline Vec8h operator - (Vec8h const a, Vec8h const b) {
 }
 
 // vector operator - : subtract vector and scalar
-static inline Vec8h operator - (Vec8h const a, float b) {
+static inline Vec8h operator - (Vec8h const a, _Float16 b) {
     return a - Vec8h(b);
 }
-static inline Vec8h operator - (float a, Vec8h const b) {
+static inline Vec8h operator - (_Float16 a, Vec8h const b) {
     return Vec8h(a) - b;
 }
 
@@ -241,13 +245,13 @@ static inline Vec8h & operator -= (Vec8h & a, Vec8h const b) {
 // postfix operator --
 static inline Vec8h operator -- (Vec8h & a, int) {
     Vec8h a0 = a;
-    a = a -  _Float16(1.);
+    a = a -  _Float16(1);
     return a0;
 }
 
 // prefix operator --
 static inline Vec8h & operator -- (Vec8h & a) {
-    a = a -  _Float16(1.);
+    a = a -  _Float16(1);
     return a;
 }
 
@@ -473,7 +477,7 @@ Vec8h nan_vec<Vec8h>(uint32_t payload) {
 } 
 
 // Function nan8h: returns a vector where all elements are NAN (quiet)
-static inline Vec8h nan8h(int n = 0x10) {
+static inline Vec8h nan8h(uint32_t n = 0x10) {
     return nan_vec<Vec8h>(n);
 }
 
@@ -963,13 +967,13 @@ static inline Vec16h & operator += (Vec16h & a, Vec16h const b) {
 // postfix operator ++
 static inline Vec16h operator ++ (Vec16h & a, int) {
     Vec16h a0 = a;
-    a = a +  _Float16(1.);
+    a = a +  _Float16(1);
     return a0;
 }
 
 // prefix operator ++
 static inline Vec16h & operator ++ (Vec16h & a) {
-    a = a +  _Float16(1.);
+    a = a +  _Float16(1);
     return a;
 }
 
@@ -1001,13 +1005,13 @@ static inline Vec16h & operator -= (Vec16h & a, Vec16h const b) {
 // postfix operator --
 static inline Vec16h operator -- (Vec16h & a, int) {
     Vec16h a0 = a;
-    a = a -  _Float16(1.);
+    a = a -  _Float16(1);
     return a0;
 }
 
 // prefix operator --
 static inline Vec16h & operator -- (Vec16h & a) {
-    a = a -  _Float16(1.);
+    a = a -  _Float16(1);
     return a;
 }
 
@@ -1233,7 +1237,7 @@ Vec16h nan_vec<Vec16h>(uint32_t payload) {
 } 
 
 // Function nan16h: returns a vector where all elements are NAN (quiet)
-static inline Vec16h nan16h(int n = 0x10) {
+static inline Vec16h nan16h(uint32_t n = 0x10) {
     return nan_vec<Vec16h>(n);
 }
 
@@ -1719,13 +1723,13 @@ static inline Vec32h & operator += (Vec32h & a, Vec32h const b) {
 // postfix operator ++
 static inline Vec32h operator ++ (Vec32h & a, int) {
     Vec32h a0 = a;
-    a = a +  _Float16(1.);
+    a = a +  _Float16(1);
     return a0;
 }
 
 // prefix operator ++
 static inline Vec32h & operator ++ (Vec32h & a) {
-    a = a +  _Float16(1.);
+    a = a +  _Float16(1);
     return a;
 }
 
@@ -1735,10 +1739,10 @@ static inline Vec32h operator - (Vec32h const a, Vec32h const b) {
 }
 
 // vector operator - : subtract vector and scalar
-static inline Vec32h operator - (Vec32h const a, float b) {
+static inline Vec32h operator - (Vec32h const a, _Float16 b) {
     return a - Vec32h(b);
 }
-static inline Vec32h operator - (float a, Vec32h const b) {
+static inline Vec32h operator - (_Float16 a, Vec32h const b) {
     return Vec32h(a) - b;
 }
 
@@ -1757,13 +1761,13 @@ static inline Vec32h & operator -= (Vec32h & a, Vec32h const b) {
 // postfix operator --
 static inline Vec32h operator -- (Vec32h & a, int) {
     Vec32h a0 = a;
-    a = a -  _Float16(1.);
+    a = a -  _Float16(1);
     return a0;
 }
 
 // prefix operator --
 static inline Vec32h & operator -- (Vec32h & a) {
-    a = a -  _Float16(1.);
+    a = a -  _Float16(1);
     return a;
 }
 
@@ -1989,7 +1993,7 @@ Vec32h nan_vec<Vec32h>(uint32_t payload) {
 } 
 
 // Function nan32h: returns a vector where all elements are NAN (quiet)
-static inline Vec32h nan32h(int n = 0x10) {
+static inline Vec32h nan32h(uint32_t n = 0x10) {
     return nan_vec<Vec32h>(n);
 }
 
@@ -2309,8 +2313,8 @@ static inline Vec32h lookup(Vec32s const index, void const * table) {
 template <typename V>
 V vh_pow2n (V const n) {           
     typedef decltype(roundi(n)) VI;              // corresponding integer vector type
-    const _Float16 pow2_10 =  1024.;             // 2^10
-    const _Float16 bias = 15.;                   // bias in exponent
+    const _Float16 pow2_10 = _Float16(1024);     // 2^10
+    const _Float16 bias = _Float16(15);          // bias in exponent
     V  a = n + (bias + pow2_10);                 // put n + bias in least significant bits
     VI b = reinterpret_i(a);                     // bit-cast to integer
     VI c = b << 10;                              // shift left 10 places to get into exponent field
@@ -2358,9 +2362,9 @@ template<typename VTYPE, int M1, int BA>
 VTYPE exp_h(VTYPE const initial_x) {
 
     // Taylor coefficients
-    const _Float16 P0expf   =  1.f/2.f;
-    const _Float16 P1expf   =  1.f/6.f;
-    const _Float16 P2expf   =  1.f/24.f;
+    const _Float16 P0expf   =  _Float16(1.f/2.f);
+    const _Float16 P1expf   =  _Float16(1.f/6.f);
+    const _Float16 P2expf   =  _Float16(1.f/24.f);
 
     VTYPE  x, r, x2, z, n2;                      // data vectors
 
@@ -2370,23 +2374,23 @@ VTYPE exp_h(VTYPE const initial_x) {
     _Float16 max_x;
 
     if constexpr (BA <= 1) {                     // exp(x)
-        const _Float16 ln2f  =  0.69314718f;     // ln(2)
-        const _Float16 log2e  =  1.44269504089f; // log2(e)
+        const _Float16 ln2f  = _Float16(0.69314718f);   // ln(2)
+        const _Float16 log2e = _Float16(1.44269504089f); // log2(e)
         x = initial_x;
         r = round(initial_x*log2e);
         x = nmul_add(r, VTYPE(ln2f), x);         //  x -= r * ln2f;
-        max_x = 10.75f;                          // overflow limit
+        max_x = _Float16(10.75f);                // overflow limit
     }
     else if constexpr (BA == 2) {                // pow(2,x)
-        const _Float16 ln2  =  0.69314718f;      // ln(2)
-        max_x = 15.5f;
+        const _Float16 ln2 = _Float16(0.69314718f); // ln(2)
+        max_x = _Float16(15.5f);
         r = round(initial_x);
         x = initial_x - r;
         x = x * ln2;
     }
     else if constexpr (BA == 10) {               // pow(10,x)
         max_x = 4.667f;
-        const _Float16 log10_2 = 0.30102999566f; // log10(2)
+        const _Float16 log10_2 = _Float16(0.30102999566f); // log10(2)
         x = initial_x;
         r = round(initial_x*_Float16(3.32192809489f)); // VM_LOG2E*VM_LN10
         x = nmul_add(r, VTYPE(log10_2), x);      //  x -= r * log10_2
@@ -2402,12 +2406,12 @@ VTYPE exp_h(VTYPE const initial_x) {
     if constexpr (BA == 1) r--;                  // 0.5 * exp(x)
     n2 = vh_pow2n(r);                            // multiply by power of 2
     if constexpr (M1 == 0) {                     // exp
-        z = (z + _Float16(1.0f)) * n2;
+        z = (z + _Float16(1)) * n2;
     }
     else {                                       // expm1
-        z = mul_add(z, n2, n2 - _Float16(1.0));  //  z = z * n2 + (n2 - 1.0f);
+        z = mul_add(z, n2, n2 - _Float16(1));    //  z = z * n2 + (n2 - 1.0f);
 #ifdef SIGNED_ZERO                               // pedantic preservation of signed zero
-        z = select(initial_x == _Float16(0.), initial_x, z);
+        z = select(initial_x == _Float16(0), initial_x, z);
 #endif
     }
     // check for overflow
@@ -2447,17 +2451,17 @@ template<typename VTYPE, int SC>
 VTYPE sincos_h(VTYPE * cosret, VTYPE const xx) {
 
     // define constants
-    const _Float16 dp1h = 1.57031250f;           // pi/2 with lower bits of mantissa removed
-    const _Float16 dp2h = 1.57079632679489661923 - dp1h; // remaining bits
+    const _Float16 dp1h = _Float16(1.57031250f);           // pi/2 with lower bits of mantissa removed
+    const _Float16 dp2h = _Float16(1.57079632679489661923 - dp1h); // remaining bits
 
-    const _Float16 P0sinf = -1.6666654611E-1f;   // Taylor coefficients
-    const _Float16 P1sinf = 8.3321608736E-3f;
+    const _Float16 P0sinf = _Float16(-1.6666654611E-1f);   // Taylor coefficients
+    const _Float16 P1sinf = _Float16(8.3321608736E-3f);
 
-    const _Float16 P0cosf = 4.166664568298827E-2f;
-    const _Float16 P1cosf = -1.388731625493765E-3f;
+    const _Float16 P0cosf = _Float16(4.166664568298827E-2f);
+    const _Float16 P1cosf = _Float16(-1.388731625493765E-3f);
 
     const float pi     = 3.14159265358979323846f;// pi
-    const _Float16 c2_pi  = float(2./3.14159265358979323846);  // 2/pi
+    const _Float16 c2_pi  = _Float16(2./3.14159265358979323846);  // 2/pi
 
     typedef decltype(roundi(xx)) ITYPE;          // integer vector type
     typedef decltype(unsigned_int_type(xx)) UITYPE;// unsigned integer vector type
@@ -2502,7 +2506,7 @@ VTYPE sincos_h(VTYPE * cosret, VTYPE const xx) {
     //x2 = select(is_inf(xx), reinterpret_h(UITYPE(0x7F00)), x2);  // return NAN rather than INF if INF input
 
     s = mul_add(x2, P1sinf, P0sinf) * (x*x2) + x;
-    c = mul_add(x2, P1cosf, P0cosf) * (x2*x2) + nmul_add(_Float16(0.5f), x2, _Float16(1.0f));
+    c = mul_add(x2, P1cosf, P0cosf) * (x2*x2) + nmul_add(_Float16(0.5), x2, _Float16(1.0f));
     // s = P0sinf * (x*x2) + x;  // 2 ULP error
     // c = P0cosf * (x2*x2) + nmul_add(0.5f, x2, 1.0f);  // 2 ULP error
 
